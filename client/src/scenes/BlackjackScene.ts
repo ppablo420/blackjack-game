@@ -198,107 +198,225 @@ export class BlackjackScene extends Phaser.Scene {
 
   // ── Dealer character ────────────────────────────────────────────────────────
   private drawDealer(): void {
-    // Container centered on screen, scaled up 1.4×
     const container = this.add.container(W / 2, 148);
     const cx = 0, cy = 0;
     const g  = this.add.graphics();
 
-    // --- SUIT BODY ---
-    g.fillStyle(0x080d1a, 1);
-    // Jacket left/right
-    g.fillTriangle(cx - 24, cy + 18, cx - 38, cy + 78, cx + 2, cy + 78);
-    g.fillTriangle(cx + 24, cy + 18, cx + 38, cy + 78, cx - 2, cy + 78);
-    // Jacket shoulders
-    g.fillEllipse(cx - 28, cy + 16, 28, 14);
-    g.fillEllipse(cx + 28, cy + 16, 28, 14);
-    // Arms
-    g.fillRoundedRect(cx - 40, cy + 16, 14, 62, 5);
-    g.fillRoundedRect(cx + 26, cy + 16, 14, 62, 5);
+    const JACKET       = 0x14141e;
+    const JACKET_DARK  = 0x0a0a12;
+    const SHIRT        = 0xf4efe6;
+    const SKIN         = 0xc8845a;
+    const SKIN_DARK    = 0x9e6040;
+    const SKIN_LIGHT   = 0xdda070;
 
-    // White shirt strip
-    g.fillStyle(0xf2f0ea, 1);
-    g.fillRect(cx - 8, cy + 14, 16, 64);
-    // White cuffs
-    g.fillRoundedRect(cx - 40, cy + 70, 14, 10, 3);
-    g.fillRoundedRect(cx + 26, cy + 70, 14, 10, 3);
+    // ── ARMS ──────────────────────────────────────────────────────────────────
+    g.fillStyle(JACKET, 1);
+    g.fillRoundedRect(cx - 46, cy + 14, 17, 70, 6);
+    g.fillRoundedRect(cx + 29, cy + 14, 17, 70, 6);
+    // Arm inner shadow
+    g.fillStyle(JACKET_DARK, 0.7);
+    g.fillRoundedRect(cx - 46, cy + 14, 5, 70, 6);
+    g.fillRoundedRect(cx + 41, cy + 14, 5, 70, 6);
+    // Cuffs
+    g.fillStyle(SHIRT, 1);
+    g.fillRoundedRect(cx - 46, cy + 74, 17, 11, 3);
+    g.fillRoundedRect(cx + 29, cy + 74, 17, 11, 3);
+    // Cuff gold links
+    g.fillStyle(GOLD_NUM, 0.9);
+    g.fillCircle(cx - 38, cy + 80, 2);
+    g.fillCircle(cx + 38, cy + 80, 2);
 
-    // Gold bow tie
-    g.fillStyle(GOLD_NUM, 1);
-    g.fillTriangle(cx - 8, cx - cx + cy + 14, cx,     cy + 19, cx - 8, cy + 24);
-    g.fillTriangle(cx + 8, cx - cx + cy + 14, cx,     cy + 19, cx + 8, cy + 24);
-    g.fillCircle(cx, cy + 19, 3);
+    // ── TORSO ─────────────────────────────────────────────────────────────────
+    g.fillStyle(JACKET, 1);
+    g.fillRect(cx - 32, cy + 14, 64, 72);
+    // Jacket side shadows
+    g.fillStyle(JACKET_DARK, 0.8);
+    g.fillRect(cx - 32, cy + 14, 8, 72);
+    g.fillRect(cx + 24, cy + 14, 8, 72);
+    // Shoulders
+    g.fillStyle(JACKET, 1);
+    g.fillEllipse(cx - 36, cy + 17, 26, 13);
+    g.fillEllipse(cx + 36, cy + 17, 26, 13);
 
-    // Gold shirt buttons
-    [30, 42, 54].forEach(dy => {
-      g.fillStyle(GOLD_NUM, 0.8);
-      g.fillCircle(cx, cy + dy, 2);
-    });
-
-    // --- NECK ---
-    g.fillStyle(0xd09070, 1);
-    g.fillRect(cx - 7, cy + 8, 14, 14);
-
-    // --- HEAD ---
-    g.fillStyle(0xd09070, 1);
-    g.fillEllipse(cx, cy - 12, 52, 56);
-
-    // Ears
-    g.fillEllipse(cx - 26, cy - 8, 11, 17);
-    g.fillEllipse(cx + 26, cy - 8, 11, 17);
-
-    // --- HAIR (straight black, slightly parted) ---
-    g.fillStyle(0x0a0604, 1);
-    g.fillEllipse(cx, cy - 30, 54, 26);       // top volume
-    g.fillRect(cx - 27, cy - 34, 9, 26);      // left side
-    g.fillRect(cx + 18, cy - 34, 9, 26);      // right side
-    g.fillEllipse(cx, cy - 40, 50, 16);       // hairline arc
-
-    // --- EYES (almond/monolid – Asian appearance) ---
-    // Whites
-    g.fillStyle(0xffffff, 1);
-    g.fillEllipse(cx - 11, cx - cx + cy - 8, 16, 8);
-    g.fillEllipse(cx + 11, cx - cx + cy - 8, 16, 8);
-
-    // Eyelid cover (skin colour makes almond shape)
-    g.fillStyle(0xd09070, 1);
-    g.fillTriangle(cx - 20, cy - 8, cx - 11, cy - 13, cx - 2, cy - 8);
-    g.fillTriangle(cx + 2,  cy - 8, cx + 11, cy - 13, cx + 20, cy - 8);
-
-    // Pupils
-    g.fillStyle(0x100804, 1);
-    g.fillCircle(cx - 11, cy - 8, 3.5);
-    g.fillCircle(cx + 11, cy - 8, 3.5);
-
-    // Eye highlights
-    g.fillStyle(0xffffff, 1);
-    g.fillCircle(cx - 10, cy - 9, 1.2);
-    g.fillCircle(cx + 12, cy - 9, 1.2);
-
-    // --- EYEBROWS (straight, dark) ---
-    g.fillStyle(0x100804, 1);
-    g.fillRect(cx - 18, cy - 18, 15, 2.5);
-    g.fillRect(cx + 3,  cy - 18, 15, 2.5);
-
-    // --- NOSE ---
-    g.fillStyle(0xb07858, 0.55);
-    g.fillEllipse(cx, cy + 1, 9, 6);
-
-    // --- MOUTH (small smile) ---
-    g.lineStyle(1.8, 0x8a4828, 1);
+    // ── SHIRT & LAPELS ────────────────────────────────────────────────────────
+    // Shirt front (V shape)
+    g.fillStyle(SHIRT, 1);
+    g.fillTriangle(cx, cy + 14, cx - 15, cy + 14, cx, cy + 58);
+    g.fillTriangle(cx, cy + 14, cx + 15, cy + 14, cx, cy + 58);
+    // Left lapel
+    g.fillStyle(JACKET, 1);
+    g.fillTriangle(cx - 32, cy + 14, cx - 14, cy + 16, cx - 32, cy + 46);
+    // Right lapel
+    g.fillTriangle(cx + 32, cy + 14, cx + 14, cy + 16, cx + 32, cy + 46);
+    // Lapel edge highlight
+    g.lineStyle(0.8, 0x2a2a3a, 0.9);
     g.beginPath();
-    g.arc(cx, cy + 12, 8, Math.PI * 0.12, Math.PI * 0.88, false);
+    g.moveTo(cx - 32, cy + 14); g.lineTo(cx - 14, cy + 16); g.lineTo(cx, cy + 14);
+    g.strokePath();
+    g.beginPath();
+    g.moveTo(cx + 32, cy + 14); g.lineTo(cx + 14, cy + 16); g.lineTo(cx, cy + 14);
     g.strokePath();
 
-    // --- GREEN VISOR (classic dealer) ---
-    g.fillStyle(0x071e10, 0.95);
-    g.fillRoundedRect(cx - 28, cy - 48, 56, 14, 4);
-    g.lineStyle(1.5, 0xffd700, 0.55);
-    g.strokeRoundedRect(cx - 28, cy - 48, 56, 14, 4);
+    // Pocket square
+    g.fillStyle(SHIRT, 0.95);
+    g.fillRect(cx - 28, cy + 26, 11, 8);
+    g.fillStyle(GOLD_NUM, 0.7);
+    g.fillTriangle(cx - 28, cy + 26, cx - 17, cy + 26, cx - 23, cy + 21);
+
+    // ── TIE ───────────────────────────────────────────────────────────────────
+    // Deep red tie
+    g.fillStyle(0x8b0000, 1);
+    g.fillTriangle(cx - 6, cy + 14, cx + 6, cy + 14, cx + 4, cy + 56);
+    g.fillTriangle(cx - 6, cy + 14, cx + 6, cy + 14, cx - 4, cy + 56);
+    // Tie knot
+    g.fillStyle(0x6a0000, 1);
+    g.fillEllipse(cx, cy + 16, 13, 10);
+    // Tie highlight
+    g.lineStyle(0.8, 0xcc1a1a, 0.45);
+    g.beginPath(); g.moveTo(cx, cy + 20); g.lineTo(cx + 1, cy + 52); g.strokePath();
+    // Shirt buttons
+    [32, 44].forEach(dy => {
+      g.fillStyle(SHIRT, 0.6);
+      g.fillCircle(cx + 9, cy + dy, 2);
+    });
+
+    // Collar points
+    g.fillStyle(SHIRT, 1);
+    g.fillTriangle(cx - 15, cy + 10, cx - 6, cy + 20, cx - 1, cy + 10);
+    g.fillTriangle(cx + 15, cy + 10, cx + 6, cy + 20, cx + 1, cy + 10);
+
+    // ── NECK ──────────────────────────────────────────────────────────────────
+    g.fillStyle(SKIN, 1);
+    g.fillRect(cx - 8, cy + 6, 16, 14);
+    g.fillStyle(SKIN_DARK, 0.4);
+    g.fillRect(cx - 8, cy + 6, 4, 14);
+    g.fillRect(cx + 4,  cy + 6, 4, 14);
+
+    // ── HEAD ──────────────────────────────────────────────────────────────────
+    // Shadow layer (gives depth)
+    g.fillStyle(SKIN_DARK, 0.35);
+    g.fillEllipse(cx + 2, cy - 14, 52, 58);
+    // Main head
+    g.fillStyle(SKIN, 1);
+    g.fillEllipse(cx, cy - 16, 52, 58);
+    // Cheek shadow
+    g.fillStyle(SKIN_DARK, 0.18);
+    g.fillEllipse(cx - 16, cy - 4, 20, 24);
+    g.fillEllipse(cx + 16, cy - 4, 20, 24);
+    // Forehead highlight
+    g.fillStyle(SKIN_LIGHT, 0.22);
+    g.fillEllipse(cx, cy - 26, 32, 18);
+
+    // Ears
+    g.fillStyle(SKIN, 1);
+    g.fillEllipse(cx - 26, cy - 12, 11, 19);
+    g.fillEllipse(cx + 26, cy - 12, 11, 19);
+    // Ear inner
+    g.fillStyle(SKIN_DARK, 0.35);
+    g.fillEllipse(cx - 26, cy - 12, 6, 12);
+    g.fillEllipse(cx + 26, cy - 12, 6, 12);
+
+    // ── HAIR ──────────────────────────────────────────────────────────────────
+    g.fillStyle(0x100c06, 1);
+    g.fillEllipse(cx, cy - 35, 54, 28);
+    g.fillRect(cx - 27, cy - 40, 10, 30);
+    g.fillRect(cx + 17, cy - 40, 10, 30);
+    g.fillEllipse(cx, cy - 44, 50, 18);
+    // Hair highlight (sheen)
+    g.fillStyle(0x2e2010, 0.55);
+    g.fillEllipse(cx + 7, cy - 40, 18, 11);
+
+    // ── EYES ──────────────────────────────────────────────────────────────────
+    // Subtle eye socket shadow
+    g.fillStyle(SKIN_DARK, 0.18);
+    g.fillEllipse(cx - 11, cy - 12, 22, 13);
+    g.fillEllipse(cx + 11, cy - 12, 22, 13);
+    // Eye whites
+    g.fillStyle(0xf8f5ee, 1);
+    g.fillEllipse(cx - 11, cy - 12, 17, 10);
+    g.fillEllipse(cx + 11, cy - 12, 17, 10);
+    // Iris
+    g.fillStyle(0x3e2610, 1);
+    g.fillCircle(cx - 11, cy - 12, 4.2);
+    g.fillCircle(cx + 11, cy - 12, 4.2);
+    // Pupil
+    g.fillStyle(0x060402, 1);
+    g.fillCircle(cx - 11, cy - 12, 2.4);
+    g.fillCircle(cx + 11, cy - 12, 2.4);
+    // Specular highlight
+    g.fillStyle(0xffffff, 1);
+    g.fillCircle(cx - 9.2, cy - 13.5, 1.3);
+    g.fillCircle(cx + 12.8, cy - 13.5, 1.3);
+    // Upper eyelid line
+    g.lineStyle(1.3, 0x140a04, 0.9);
+    g.beginPath(); g.arc(cx - 11, cy - 12, 8.5, Math.PI * 0.82, Math.PI * 0.18, false); g.strokePath();
+    g.beginPath(); g.arc(cx + 11, cy - 12, 8.5, Math.PI * 0.82, Math.PI * 0.18, false); g.strokePath();
+    // Eyelid fold (almond)
+    g.fillStyle(SKIN, 1);
+    g.fillTriangle(cx - 20, cy - 12, cx - 11, cy - 17, cx - 2, cy - 12);
+    g.fillTriangle(cx + 2,  cy - 12, cx + 11, cy - 17, cx + 20, cy - 12);
+
+    // ── EYEBROWS ──────────────────────────────────────────────────────────────
+    g.fillStyle(0x160e06, 1);
+    for (let i = 0; i < 15; i++) {
+      const t  = i / 14;
+      const bx = cx - 19 + i;
+      const by = cy - 22 - Math.sin(t * Math.PI) * 2.5;
+      g.fillRect(bx, by, 1.5, 2.8);
+    }
+    for (let i = 0; i < 15; i++) {
+      const t  = i / 14;
+      const bx = cx + 4 + i;
+      const by = cy - 22 - Math.sin(t * Math.PI) * 2.5;
+      g.fillRect(bx, by, 1.5, 2.8);
+    }
+
+    // ── NOSE ──────────────────────────────────────────────────────────────────
+    // Bridge shadow lines
+    g.lineStyle(0.9, SKIN_DARK, 0.3);
+    g.beginPath(); g.moveTo(cx - 3, cy - 18); g.lineTo(cx - 5, cy - 2); g.strokePath();
+    g.beginPath(); g.moveTo(cx + 3, cy - 18); g.lineTo(cx + 5, cy - 2); g.strokePath();
+    // Tip
+    g.fillStyle(SKIN_DARK, 0.28);
+    g.fillEllipse(cx, cy - 1, 12, 8);
+    // Nostrils
+    g.fillStyle(SKIN_DARK, 0.48);
+    g.fillEllipse(cx - 5, cy + 1, 5, 4);
+    g.fillEllipse(cx + 5, cy + 1, 5, 4);
+
+    // ── MOUTH ─────────────────────────────────────────────────────────────────
+    // Upper lip
+    g.fillStyle(0x9a5030, 0.75);
+    g.fillEllipse(cx, cy + 11, 19, 6);
+    // Lower lip
+    g.fillStyle(0xac6040, 0.65);
+    g.fillEllipse(cx, cy + 15, 17, 7);
+    // Mouth crease
+    g.lineStyle(1.3, 0x7a3818, 0.85);
+    g.beginPath(); g.arc(cx, cy + 16, 9.5, Math.PI * 0.08, Math.PI * 0.92, false); g.strokePath();
+    // Subtle smile corners
+    g.lineStyle(1, 0x7a3818, 0.5);
+    g.beginPath(); g.arc(cx - 9, cy + 14, 3, Math.PI * 0.5, Math.PI, false); g.strokePath();
+    g.beginPath(); g.arc(cx + 9, cy + 14, 3, 0, Math.PI * 0.5, false); g.strokePath();
+
+    // ── VISOR ─────────────────────────────────────────────────────────────────
+    g.fillStyle(0x0a2a14, 0.97);
+    g.fillRoundedRect(cx - 31, cy - 54, 62, 16, 5);
+    // Brim (translucent shade)
+    g.fillStyle(0x0d3318, 0.45);
+    g.fillRoundedRect(cx - 31, cy - 41, 62, 5, 2);
+    // Gold trim
+    g.lineStyle(1.5, GOLD_NUM, 0.75);
+    g.strokeRoundedRect(cx - 31, cy - 54, 62, 16, 5);
+    // Visor inner highlight
+    g.fillStyle(0x2a7040, 0.18);
+    g.fillRoundedRect(cx - 29, cy - 53, 58, 6, 3);
 
     // Label
-    const label = this.add.text(cx, cy + 96, '· DEALER ·', {
-      fontSize: '9px', fontFamily: 'Georgia, serif', color: '#8a7050',
-    }).setOrigin(0.5).setAlpha(0.8);
+    const label = this.add.text(cx, cy + 100, '· D E A L E R ·', {
+      fontSize: '9px', fontFamily: 'Georgia, serif',
+      color: '#8a7050', letterSpacing: 2,
+    }).setOrigin(0.5).setAlpha(0.78);
 
     container.add([g, label]);
     container.setScale(1.4);
