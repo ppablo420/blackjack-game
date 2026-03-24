@@ -115,19 +115,19 @@ export function createCardSprite(
     }).setOrigin(0.5);
     container.add(center);
 
-    // Rank bottom-right (rotated)
-    // With origin(1,1)+angle(180), text renders DOWNWARD from anchor → anchor must be
-    // at least (fontSize)px above the card edge: CARD_HEIGHT/2 - 7 - 22 = CARD_HEIGHT/2 - 29
-    const rankBR = scene.add.text(CARD_WIDTH / 2 - 9, CARD_HEIGHT / 2 - 29, card.rank, {
+    // Rank bottom-right (rotated 180°)
+    // origin(0,0) + angle(180) → text extends UP and LEFT from anchor.
+    // Anchor sits near bottom-right corner, mirroring the top-left rank.
+    const rankBR = scene.add.text(CARD_WIDTH / 2 - 9, CARD_HEIGHT / 2 - 7, card.rank, {
       fontSize: '22px', fontFamily: 'Georgia, serif',
       color: suitColor, fontStyle: 'bold',
-    }).setOrigin(1, 1).setAngle(180);
+    }).setOrigin(0, 0).setAngle(180);
     container.add(rankBR);
 
-    // Suit bottom-right (rotated)
-    const suitBR = scene.add.text(CARD_WIDTH / 2 - 10, CARD_HEIGHT / 2 - 52, sym, {
+    // Suit bottom-right (rotated 180°)
+    const suitBR = scene.add.text(CARD_WIDTH / 2 - 10, CARD_HEIGHT / 2 - 32, sym, {
       fontSize: '17px', fontFamily: 'serif', color: suitColor,
-    }).setOrigin(1, 1).setAngle(180);
+    }).setOrigin(0, 0).setAngle(180);
     container.add(suitBR);
   }
 

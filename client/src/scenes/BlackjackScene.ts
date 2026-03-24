@@ -78,39 +78,48 @@ export class BlackjackScene extends Phaser.Scene {
 
   // ── Table ──────────────────────────────────────────────────────────────────
   private drawTable(): void {
+    const MAPLE   = 0xb06822;   // maple wood border
+    const FELT_BG = 0x0f0000;   // near-black background
+    const FELT_OUT = 0x3a0000;  // dark crimson outer felt
+    const FELT_IN  = 0x4d0808;  // dark crimson inner felt (slightly lighter)
+
     const bg = this.add.graphics();
 
-    // Dark wood outer ring
-    bg.fillStyle(0x05080f, 1);
+    // Maple-wood outer ring
+    bg.fillStyle(FELT_BG, 1);
     bg.fillRect(0, 0, W, H);
 
-    // Dark navy outer felt
-    bg.fillStyle(0x080e1c, 1);
+    // Dark crimson outer felt
+    bg.fillStyle(FELT_OUT, 1);
     bg.fillRoundedRect(12, 12, W - 24, H - 24, 32);
 
-    // Inner navy felt (slightly lighter)
-    bg.fillStyle(0x0d1b35, 1);
+    // Dark crimson inner felt (slightly lighter)
+    bg.fillStyle(FELT_IN, 1);
     bg.fillRoundedRect(26, 26, W - 52, H - 52, 26);
 
-    // Gold outer border (thick)
+    // Maple thick outer border
     const brd = this.add.graphics();
-    brd.lineStyle(3, GOLD_NUM, 0.85);
-    brd.strokeRoundedRect(26, 26, W - 52, H - 52, 26);
+    brd.lineStyle(7, MAPLE, 1);
+    brd.strokeRoundedRect(12, 12, W - 24, H - 24, 32);
 
-    // Gold inner border (thin)
-    brd.lineStyle(1, GOLD_NUM, 0.35);
-    brd.strokeRoundedRect(40, 40, W - 80, H - 80, 20);
+    // Maple thin inner border
+    brd.lineStyle(2, MAPLE, 0.55);
+    brd.strokeRoundedRect(36, 36, W - 72, H - 72, 22);
 
-    // Dealer arc (gold)
+    // Gold highlight line just inside the thick border
+    brd.lineStyle(1.5, GOLD_NUM, 0.28);
+    brd.strokeRoundedRect(22, 22, W - 44, H - 44, 28);
+
+    // Dealer arc (maple, subtle)
     const arc = this.add.graphics();
-    arc.lineStyle(1.5, GOLD_NUM, 0.22);
+    arc.lineStyle(1.5, MAPLE, 0.3);
     arc.beginPath();
     arc.arc(W / 2, 16, 260, Math.PI * 0.13, Math.PI * 0.87, false);
     arc.strokePath();
 
-    // Divider line (gold, subtle)
+    // Divider line (maple, subtle)
     const div = this.add.graphics();
-    div.lineStyle(1, GOLD_NUM, 0.2);
+    div.lineStyle(1, MAPLE, 0.25);
     div.beginPath();
     div.moveTo(100, 330); div.lineTo(W - 100, 330);
     div.strokePath();
@@ -119,35 +128,35 @@ export class BlackjackScene extends Phaser.Scene {
     this.add.text(W / 2, 40, 'YONI CASINO', {
       fontSize: '14px', fontFamily: 'Georgia, serif',
       color: GOLD, fontStyle: 'bold', letterSpacing: 8,
-    }).setOrigin(0.5).setAlpha(0.5);
+    }).setOrigin(0.5).setAlpha(0.6);
 
     // Area labels
     this.add.text(W / 2, 58, 'DEALER', {
       fontSize: '10px', fontFamily: 'Georgia, serif',
-      color: '#a89060', fontStyle: 'bold',
-    }).setOrigin(0.5).setAlpha(0.5);
+      color: '#c8a060', fontStyle: 'bold',
+    }).setOrigin(0.5).setAlpha(0.6);
     this.add.text(W / 2, 406, 'PLAYER', {
       fontSize: '10px', fontFamily: 'Georgia, serif',
-      color: '#a89060', fontStyle: 'bold',
-    }).setOrigin(0.5).setAlpha(0.5);
+      color: '#c8a060', fontStyle: 'bold',
+    }).setOrigin(0.5).setAlpha(0.6);
 
-    // Decorative suit symbols — dark gold on navy
+    // Decorative suit symbols — subtle crimson tones on red felt
     const suitDeco: { x: number; y: number; sym: string }[] = [
-      { x: 110,       y: 178,     sym: '♠' },
-      { x: W - 110,   y: 178,     sym: '♣' },
-      { x: 110,       y: H - 178, sym: '♥' },
-      { x: W - 110,   y: H - 178, sym: '♦' },
-      { x: W / 2 - 200, y: H / 2, sym: '♦' },
-      { x: W / 2 - 65,  y: H / 2, sym: '♠' },
-      { x: W / 2 + 65,  y: H / 2, sym: '♥' },
-      { x: W / 2 + 200, y: H / 2, sym: '♣' },
+      { x: 110,         y: 178,     sym: '♠' },
+      { x: W - 110,     y: 178,     sym: '♣' },
+      { x: 110,         y: H - 178, sym: '♥' },
+      { x: W - 110,     y: H - 178, sym: '♦' },
+      { x: W / 2 - 200, y: H / 2,   sym: '♦' },
+      { x: W / 2 - 65,  y: H / 2,   sym: '♠' },
+      { x: W / 2 + 65,  y: H / 2,   sym: '♥' },
+      { x: W / 2 + 200, y: H / 2,   sym: '♣' },
     ];
     suitDeco.forEach(({ x, y, sym }) => {
       const isRed = sym === '♥' || sym === '♦';
       this.add.text(x, y, sym, {
         fontSize: '56px', fontFamily: 'serif',
-        color: isRed ? '#7a1010' : '#1a3060',
-      }).setOrigin(0.5).setAlpha(0.32);
+        color: isRed ? '#8b0000' : '#3a0000',
+      }).setOrigin(0.5).setAlpha(0.38);
     });
   }
 
@@ -390,10 +399,15 @@ export class BlackjackScene extends Phaser.Scene {
       this.showResults(next, animate);
       this.showNewRoundButton(animate);
       this.playResultSound(next);
+      if (animate) this.animateChipScrape(next);
     }
   }
 
   // ── Card sync (diff engine) ────────────────────────────────────────────────
+  private cardIdentity(card: Card): string {
+    return card.faceUp ? `${card.rank}_${card.suit}` : 'back';
+  }
+
   private async syncCards(next: GameState, prev: GameState | null, animate: boolean): Promise<void> {
     const tasks: Promise<void>[] = [];
     let stagger = 0;
@@ -404,7 +418,17 @@ export class BlackjackScene extends Phaser.Scene {
       const key      = `d${i}`;
       const pos      = this.dealerCardPos(i, dTotal);
       const existing = this.cardMap.get(key);
-      const prevCard  = prev?.dealerHand.cards[i];
+      const prevCard = prev?.dealerHand.cards[i];
+
+      // Card identity changed (shouldn't happen for dealer, but be safe)
+      if (existing && prevCard && this.cardIdentity(prevCard) !== this.cardIdentity(card)
+          && prevCard.faceUp && card.faceUp) {
+        existing.destroy();
+        this.cardMap.delete(key);
+        tasks.push(this.dealCard(key, card, pos.x, pos.y, animate ? stagger : 0));
+        stagger += 145;
+        return;
+      }
 
       if (!existing) {
         tasks.push(this.dealCard(key, card, pos.x, pos.y, animate ? stagger : 0));
@@ -427,7 +451,17 @@ export class BlackjackScene extends Phaser.Scene {
         const key      = `p${hIdx}_${cIdx}`;
         const pos      = this.playerCardPos(hIdx, cIdx, totalHands, totalCards);
         const existing = this.cardMap.get(key);
-        const prevCard  = prev?.playerHands[hIdx]?.cards[cIdx];
+        const prevCard = prev?.playerHands[hIdx]?.cards[cIdx];
+
+        // Card identity changed (e.g. after split — old p0_1 becomes a different card)
+        if (existing && prevCard && this.cardIdentity(prevCard) !== this.cardIdentity(card)
+            && prevCard.faceUp && card.faceUp) {
+          existing.destroy();
+          this.cardMap.delete(key);
+          tasks.push(this.dealCard(key, card, pos.x, pos.y, animate ? stagger : 0));
+          stagger += 145;
+          return;
+        }
 
         if (!existing) {
           tasks.push(this.dealCard(key, card, pos.x, pos.y, animate ? stagger : 0));
@@ -443,7 +477,7 @@ export class BlackjackScene extends Phaser.Scene {
       });
     });
 
-    // Remove stale cards (e.g. after split)
+    // Remove stale cards (e.g. after split changes hand count)
     const valid = new Set<string>();
     next.dealerHand.cards.forEach((_, i) => valid.add(`d${i}`));
     next.playerHands.forEach((hand, hIdx) => hand.cards.forEach((_, cIdx) => valid.add(`p${hIdx}_${cIdx}`)));
@@ -704,7 +738,13 @@ export class BlackjackScene extends Phaser.Scene {
     this.input.setHitArea([c], new Phaser.Geom.Circle(0, 0, 36), Phaser.Geom.Circle.Contains);
     c.on('pointerover', () => this.tweens.add({ targets: c, scaleX: 1.13, scaleY: 1.13, duration: 90 }));
     c.on('pointerout',  () => this.tweens.add({ targets: c, scaleX: 1,    scaleY: 1,    duration: 90 }));
-    c.on('pointerdown', () => { if (!this.busy) { sounds.chipClick(); this.call(() => api.placeBet(amount)); } });
+    c.on('pointerdown', () => {
+      if (!this.busy) {
+        sounds.chipClick();
+        this.animateChipThrow(x, y, amount);
+        this.call(() => api.placeBet(amount));
+      }
+    });
     return c;
   }
 
@@ -785,6 +825,104 @@ export class BlackjackScene extends Phaser.Scene {
     this.resultLabels.forEach(t => t.destroy()); this.resultLabels = [];
     this.valueLabels.forEach(t => t.destroy());  this.valueLabels = [];
     this.dealerValText.setText('');
+  }
+
+  // ── Chip animations ─────────────────────────────────────────────────────────
+
+  /** Throw a chip from the chip row to the center of the table when placing a bet. */
+  private animateChipThrow(fromX: number, fromY: number, amount: number): void {
+    const targetX = W / 2 + Phaser.Math.Between(-30, 30);
+    const targetY = PLAYER_Y - CARD_HEIGHT / 2 - 50;
+
+    const chip = this.createMiniChip(fromX, fromY, amount);
+    chip.setDepth(40);
+
+    const startX = fromX, startY = fromY;
+    const arcH = 120;
+
+    this.tweens.addCounter({
+      from: 0, to: 1,
+      duration: 380,
+      ease: 'Cubic.easeOut',
+      onUpdate: (tween) => {
+        const t = tween.getValue();
+        chip.x = Phaser.Math.Linear(startX, targetX, t);
+        chip.y = Phaser.Math.Linear(startY, targetY, t) - Math.sin(t * Math.PI) * arcH;
+        chip.scaleX = Phaser.Math.Linear(1, 0.55, t);
+        chip.scaleY = Phaser.Math.Linear(1, 0.55, t);
+      },
+      onComplete: () => {
+        // Chip stays on table briefly then fades
+        this.tweens.add({ targets: chip, alpha: 0, duration: 600, delay: 400, onComplete: () => chip.destroy() });
+      },
+    });
+  }
+
+  /** Scrape chips toward the player (win) or toward the dealer (lose). */
+  private animateChipScrape(state: GameState): void {
+    const results = state.playerHands.map(h => h.result);
+    const anyWin  = results.some(r => r === 'win' || r === 'blackjack');
+    const anyLose = results.some(r => r === 'lose');
+    const allPush = results.every(r => r === 'push');
+
+    if (allPush) return; // no chip movement on push
+
+    const chipCount = Phaser.Math.Clamp(Math.ceil(state.currentBet / 20), 2, 8);
+    const centerY   = PLAYER_Y - CARD_HEIGHT / 2 - 50;
+
+    for (let i = 0; i < chipCount; i++) {
+      const startX = W / 2 + Phaser.Math.Between(-50, 50);
+      const startY = centerY + Phaser.Math.Between(-10, 10);
+      const chipVal = [5, 10, 25, 50, 100][Phaser.Math.Between(0, 4)];
+      const chip = this.createMiniChip(startX, startY, chipVal);
+      chip.setScale(0.55).setDepth(40).setAlpha(0);
+
+      const targetY = anyWin ? H - 30 : 60;    // win → player, lose → dealer
+      const targetX = startX + Phaser.Math.Between(-70, 70);
+      const delay   = 300 + i * 90;
+
+      this.tweens.add({
+        targets: chip, alpha: 1, duration: 150, delay,
+        onComplete: () => {
+          sounds.chipClick();
+          const sX = chip.x, sY = chip.y;
+          this.tweens.addCounter({
+            from: 0, to: 1,
+            duration: 450,
+            ease: 'Cubic.easeIn',
+            onUpdate: (tween) => {
+              const t = tween.getValue();
+              chip.x = Phaser.Math.Linear(sX, targetX, t);
+              chip.y = Phaser.Math.Linear(sY, targetY, t);
+              chip.alpha = 1 - t * 0.6;
+            },
+            onComplete: () => chip.destroy(),
+          });
+        },
+      });
+    }
+  }
+
+  /** Create a small chip graphic for animations (not interactive). */
+  private createMiniChip(x: number, y: number, amount: number): Phaser.GameObjects.Container {
+    const c = this.add.container(x, y);
+    const g = this.add.graphics();
+    const cols: Record<number, number> = {
+      5: 0xdc2626, 10: 0x1d4ed8, 25: 0x15803d, 50: 0xea580c, 100: 0x7c3aed,
+    };
+    const col = cols[amount] || 0x555555;
+
+    g.fillStyle(col, 1);         g.fillCircle(0, 0, 26);
+    g.lineStyle(2.5, 0xffffff, 0.6); g.strokeCircle(0, 0, 26);
+    g.lineStyle(1.5, 0xffffff, 0.2); g.strokeCircle(0, 0, 19);
+
+    const lbl = this.add.text(0, 0, `$${amount}`, {
+      fontSize: '11px', fontFamily: 'Georgia, serif',
+      color: WHITE, fontStyle: 'bold', stroke: '#000', strokeThickness: 1.5,
+    }).setOrigin(0.5);
+
+    c.add([g, lbl]);
+    return c;
   }
 
   // ── Sound ───────────────────────────────────────────────────────────────────
