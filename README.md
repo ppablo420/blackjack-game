@@ -1,6 +1,6 @@
 # Blackjack — Yoni Casino
 
-A full-stack casino blackjack game built with **Phaser 3** (frontend) and **Express.js** (backend), both in **TypeScript**.
+**Blackjack – Yoni Casino** is a full-stack browser-based blackjack game built with Phaser 3 and Express.js (TypeScript). Features animated card dealing, chip-based betting ($5–$100), and all major actions — Hit, Stand, Double Down & Split. All game logic runs server-side on a 6-deck shoe. No image assets — everything is drawn with Phaser graphics primitives.
 
 ## How to Run
 
@@ -108,3 +108,42 @@ blackjack-game/
 - **Mobile layout** — responsive scaling and touch-friendly controls
 - **WebSocket upgrade** — for future multiplayer or live dealer extensions
 - **Betting history** — per-session profit/loss tracker
+
+---
+
+## Changelog
+
+### v1.0 — Initial Build
+The first working version established the full project architecture:
+
+- Full-stack setup with **npm workspaces** (client / server / shared)
+- **Express.js** REST API handling all game logic server-side
+- **Phaser 3** client rendering the game state received from the server
+- Complete blackjack engine: Hit, Stand, Double Down, Split (up to 4 hands)
+- 6-deck shoe with Fisher-Yates shuffle and auto-reshuffle at 75%
+- Animated card dealing — cards slide in from the shoe position
+- Dealer hole card flip animation on reveal
+- Chip-based betting UI ($5 / $10 / $25 / $50 / $100)
+- Balance tracking with correct payouts (3:2 for blackjack)
+- Session persistence via `localStorage`
+- Diff-based animation engine — only changed cards are re-rendered, avoiding flicker
+
+### v1.1 — Visual Polish & Chip Animations
+Focused on making the game feel more alive and polished:
+
+- **Table redesign** — switched from dark navy/gold theme to dark crimson felt with maple wood border
+- **Chip throw animation** — chip flies from the bet row to the table center when placing a bet
+- **Chip scrape animation** — chips slide toward the player on win, or toward the dealer on loss
+- **Card rendering fix** — corrected bottom-right rank and suit position (origin + rotation was misaligned)
+- **Split stability fix** — added card identity check to correctly handle card replacement after a split
+- **TypeScript config fix** — corrected `rootDir` in server `tsconfig.json` for shared type resolution
+
+### Planned — Next Improvements
+Features currently being considered for upcoming versions:
+
+- Sound effects (deal, flip, win, lose, chip click)
+- Insurance & Surrender actions
+- Persistent balance storage (survive server restarts)
+- Betting history / session stats panel
+- Mobile-responsive layout
+- Unit tests for server game logic
